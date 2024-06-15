@@ -1,25 +1,41 @@
-#ifndef SERVER_H
-#define SERVER_H
+#pragma once
 
+#include "srvthread.h"
+
+#include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <QDir>
 
-class Server : public QTcpServer {
+class Server : public QTcpServer
+{
     Q_OBJECT
-public:
-    explicit Server(QObject *parent = nullptr);
-    void startServer();
 
-protected:
-    void incomingConnection(qintptr socketDescriptor) override;
+public:
+    Server(const QStringList& fileList, const QString &recordFileName);
 
 private:
-    void handleClient(QTcpSocket *clientSocket);
-    void receiveFile(QTcpSocket *clientSocket);
+    const QStringList& fileList;
+    QString recordFileName;
+    quint16 slideNumber;
+    quint16 slideNumberMinimum;
+    quint16 slideNumberMaximum;
 
-    std::vector<QTcpSocket*> clients;
-    std::mutex clientsMutex;
+    std::list<std::unique_ptr<SrvThread>> threads;
+
+signals:
+    void slideNumberChanged(quint16 slideNumber);
+
+public:
+    void slideNumberIncrease();
+    void slideNumberDecrease();
+    void setslideNumberMinimum(quint16 slideNumberMinimum);
+    void setslideNumberMaximum(quint16 slideNumberMaximum);
+    const quint16 getSlideNumber();
+
+public slots:
+    void incomingConnection(qintptr socketDescriptor);
+
+//****************************************TRANSLATE VOICE****************************************************************
+public:
+
 };
-
-#endif // SERVER_H
