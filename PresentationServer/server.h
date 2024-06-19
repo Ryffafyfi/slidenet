@@ -28,14 +28,11 @@ signals:
 public:
     void slideNumberIncrease();
     void slideNumberDecrease();
-    void setslideNumberMinimum(quint16 slideNumberMinimum);
+    void setslideNumberMinimum(qint64 slideNumberMinimum);
     void setslideNumberMaximum(quint16 slideNumberMaximum);
     const quint16 getSlideNumber();
 
 public slots:
     void incomingConnection(qintptr socketDescriptor);
-
-//****************************************TRANSLATE VOICE****************************************************************
-public:
 
 };

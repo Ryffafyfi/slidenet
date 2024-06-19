@@ -22,11 +22,16 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(test_funcs funcs.cpp test_funcs.cpp)
+    enable_testing()
+    add_test(NAME test_funcs COMMAND test_funcs --force-colors -d)
     qt_add_executable(PresentationServer
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         server.h server.cpp
         srvthread.h srvthread.cpp
+        funcs.cpp
+        funcs.h
 
     )
 # Define target properties for Android with Qt 6 as:

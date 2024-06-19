@@ -2,10 +2,19 @@
 
 #include <QApplication>
 
+/**
+ * @brief Главная функция приложения.
+ * 
+ * Создает объект QApplication, инициализирует и показывает главное окно приложения.
+ * 
+ * @param argc Количество аргументов командной строки.
+ * @param argv Массив аргументов командной строки.
+ * @return Код завершения приложения.
+ */
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    return a.exec();
+    QApplication a(argc, argv); /**< Создание объекта приложения. */
+    MainWindow w; /**< Создание главного окна приложения. */
+    w.show(); /**< Отображение главного окна. */
+    return a.exec(); /**< Запуск цикла обработки событий приложения. */
 }
