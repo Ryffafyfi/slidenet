@@ -1,6 +1,10 @@
 #include "presentationclient.h"
 #include "./ui_presentationclient.h"
 
+/**
+ * @brief Конструктор класса PresentationClient.
+ * @param parent Указатель на родительский виджет.
+ */
 PresentationClient::PresentationClient(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::PresentationClient), socket{ std::make_unique<QTcpSocket>() },
     m_nNextBlockSize { 0 }, Data {0, Qt::Uninitialized}, pixmapVector{0}, isShow {true}, slideNumber {0}
@@ -15,11 +19,20 @@ PresentationClient::PresentationClient(QWidget *parent)
     ui->imageLabel->setAlignment(Qt::AlignCenter);
 }
 
+/**
+ * @brief Деструктор класса PresentationClient.
+ */
 PresentationClient::~PresentationClient()
 {
     delete ui;
 }
 
+/**
+ * @brief Обработчик нажатия кнопки подключения.
+ * 
+ * Пытается подключиться к серверу по адресу 127.0.0.1 на порт 2323.
+ * Если подключение не удается, отображает сообщение об ошибке.
+ */
 void PresentationClient::on_connectionButton_clicked()
 {
     socket->connectToHost("127.0.0.1", 2323);
@@ -33,18 +46,27 @@ void PresentationClient::on_connectionButton_clicked()
     }
 }
 
+/**
+ * @brief Запрашивает номер текущего слайда у сервера.
+ * 
+ * Очищает буфер данных, подготавливает QDataStream для записи команды
+ * запроса номера слайда и отправляет эти данные на сервер.
+ */
 void PresentationClient::requestingASlideNumber()
 {
     Data.clear();
     QDataStream out(&Data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_6_6);
     out << quint16(commandsForServer::numberOfSlide);
-    //out << str; //Записываем блок;
-    //out.device()->seek(0); //Когда блок записан, переходим в начало и мерием длину блока;
-    //out << quint16(Data.size() - sizeof(quint16));
     socket->write(Data);
 }
 
+/**
+ * @brief Читает слайды с сервера.
+ * 
+ * Функция читает слайды с сервера, конвертирует их в QPixmap и 
+ * сохраняет в вектор pixmapVector. Если возникает ошибка, отображает сообщение.
+ */
 void PresentationClient::slidesReadFromServer()
 {
     Data.clear();
@@ -82,6 +104,12 @@ void PresentationClient::slidesReadFromServer()
     }
 }
 
+/**
+ * @brief Читает номер текущего слайда с сервера.
+ * 
+ * Функция читает номер текущего слайда с сервера и отправляет сигнал,
+ * когда номер слайда прочитан. Если возникает ошибка, отображает сообщение.
+ */
 void PresentationClient::slideNumberFromServer()
 {
     Data.clear();
@@ -102,9 +130,14 @@ void PresentationClient::slideNumberFromServer()
     }
 }
 
+/**
+ * @brief Загружает голосовую запись с сервера.
+ * 
+ * Функция читает голосовую запись с сервера и сохраняет её в файл.
+ * Если возникает ошибка, отображает сообщение.
+ */
 void PresentationClient::downloadRecordFromServer()
 {
-
     qDebug() << "TEST 0";
 
     Data.clear();
@@ -150,6 +183,12 @@ void PresentationClient::downloadRecordFromServer()
     } 
 }
 
+/**
+ * @brief Обработчик нажатия кнопки показа презентации.
+ * 
+ * Функция циклически отображает слайды, запрашивая номер текущего слайда и
+ * обновляя изображение на метке imageLabel.
+ */
 void PresentationClient::on_showAPresentationButton_clicked()
 {
     while(isShow && pixmapVector.size() != 0)
@@ -162,7 +201,12 @@ void PresentationClient::on_showAPresentationButton_clicked()
     }
 }
 
-
+/**
+ * @brief Обработчик нажатия кнопки загрузки голосовой записи.
+ * 
+ * Функция открывает диалоговое окно для выбора имени файла и затем запрашивает 
+ * голосовую запись у сервера, сохраняет её в выбранный файл.
+ */
 void PresentationClient::on_downloadVoiceRecordButton_clicked()
 {    
     recordFileName = QFileDialog::getSaveFileName();
@@ -183,7 +227,4 @@ void PresentationClient::on_downloadVoiceRecordButton_clicked()
     {
         QMessageBox::information(this, QGuiApplication::applicationDisplayName(), "The file path is not set correctly");
     }
-
-
 }
-
