@@ -1,4 +1,6 @@
 #include "srvthread.h"
+#include "funcs.h"
+
 /**
  * @brief Конструктор SrvThread.
  * 
@@ -75,14 +77,8 @@ void SrvThread::receivingCommandFromClient()
     Data.clear();
     QDataStream in(socket.get());
     in.setVersion(QDataStream::Qt_6_6);
-    if(in.status() == QDataStream::Ok)
-    {
-        if (socket->bytesAvailable() == (qint64)sizeof(quint16))
-        {
-            in >> this->commandFromClient;
-        }
-    }
-
+    if (valid_receiving(in.status(), socket->bytesAvailable()))
+         in >> this->commandFromClient;
     executeClientCommand();
 }
 
