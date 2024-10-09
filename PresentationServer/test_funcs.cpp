@@ -70,3 +70,75 @@ TEST_CASE("Set_num_min - Case 4")
     set_num_min(&real_num_min, 0);
     CHECK(real_num_min == 3);
 }
+
+
+// ---------------- EGOR TESTS ------------------------------
+
+TEST_CASE("checking_filelist - Case 1")
+{
+    QStringList test_filelist = {"Qwe", "Rty"};
+    CHECK(checking_filelist(test_filelist) == false);
+}
+TEST_CASE("checking_filelist - Case 2")
+{
+    QStringList test_filelist = {"Qwe", "Rty", "said"};
+    CHECK(checking_filelist(test_filelist) == false);
+}
+TEST_CASE("checking_filelist - Case 3")
+{
+    QStringList test_filelist = {};
+    CHECK(checking_filelist(test_filelist) == true);
+}
+TEST_CASE("checking_filelist - Case 4")
+{
+    QStringList test_filelist = {"123", "090"};
+    CHECK(checking_filelist(test_filelist) == false);
+}
+
+
+TEST_CASE("checking_path_exist - Case 1")
+{
+    const auto test_v = ""; // вставить существующий путь
+    CHECK(checking_path_exist(test_v) == true);
+}
+TEST_CASE("checking_path_exist - Case 2")
+{
+    const auto test_v = ""; // вставить несуществующий путь
+    CHECK(checking_path_exist(test_v) == false);
+}
+TEST_CASE("checking_path_exist - Case 3")
+{
+    const auto test_v = ""; // вставить существующий путь
+    CHECK(checking_path_exist(test_v) == true);
+}
+TEST_CASE("checking_path_exist - Case 4")
+{
+    const auto test_v = ""; // вставить несуществующий путь
+    CHECK(checking_path_exist(test_v) == false);
+}
+
+
+TEST_CASE("checking_valid_and_correct_status - Case 1")
+{
+    QString test_recordFileName = ""; // вставить существующий путь
+    QMediaRecorder::RecorderState test_stat = QMediaRecorder::StoppedState;
+    CHECK(checking_valid_and_correct_status(test_recordFileName, test_stat) == true);
+}
+TEST_CASE("checking_valid_and_correct_status - Case 1")
+{
+    QString test_recordFileName = ""; // вставить несуществующий путь
+    QMediaRecorder::RecorderState test_stat = QMediaRecorder::StoppedState;
+    CHECK(checking_valid_and_correct_status(test_recordFileName, test_stat) == false);
+}
+TEST_CASE("checking_valid_and_correct_status - Case 1")
+{
+    QString test_recordFileName = ""; // вставить несуществующий путь
+    QMediaRecorder::RecorderState test_stat = QMediaRecorder::RecordingState;
+    CHECK(checking_valid_and_correct_status(test_recordFileName, test_stat) == false);
+}
+TEST_CASE("checking_valid_and_correct_status - Case 1")
+{
+    QString test_recordFileName = ""; // вставить существующий путь
+    QMediaRecorder::RecorderState test_stat = QMediaRecorder::PausedState;
+    CHECK(checking_valid_and_correct_status(test_recordFileName, test_stat) == false);
+}
