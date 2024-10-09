@@ -14,7 +14,7 @@ bool chack_and_change_slide_num(quint16 * slide_num, quint16 slide_num_inf, QStr
 void set_num_min(quint16 * real_num_min, qint64 num_min);
 
 
-// ------------------------- EGOR FUNCS ------------------------
+
 
 bool checking_filelist(QStringList filelist);
 bool checking_path_exist(const auto v);
