@@ -82,3 +82,21 @@ void set_num_min(quint16 * real_num_min, qint64 num_min)
     if(num_min > 0)
         *real_num_min = num_min;
 }
+
+bool checking_filelist(QStringList filelist)
+{
+    return filelist.isEmpty();
+}
+
+
+bool checking_path_exist(const auto v)
+{
+    return QFile::exists(v);
+}
+
+
+bool checking_valid_and_correct_status(QString recordFileName, QMediaRecorder::RecorderState stat)
+{
+    return (QUrl::fromLocalFile(recordFileName).isValid() && stat == QMediaRecorder::StoppedState);
+}
+
