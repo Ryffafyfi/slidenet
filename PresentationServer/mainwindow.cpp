@@ -49,7 +49,7 @@ MainWindow::~MainWindow()
  */
 void MainWindow::on_startServerButton_clicked()
 {
-    if(fileList.isEmpty())
+    if(checking_filelist(fileList))
     {
         QMessageBox::information(this, QGuiApplication::applicationDisplayName(), "No image files selected");
     }
@@ -60,7 +60,6 @@ void MainWindow::on_startServerButton_clicked()
         tcpServer->setslideNumberMaximum(fileList.size());
     }
 }
-
 /**
  * @brief Слот для обработки нажатия кнопки загрузки изображений.
  * 
@@ -71,20 +70,20 @@ void MainWindow::on_uploadButton_clicked()
     fileList = std::move(fdialog.getOpenFileNames(this, tr("Open Image"),
                                                   "/home/jana", tr("Image Files (*.png *.jpg *.jpeg *.bmp)")));
 
-    if(!fileList.isEmpty())
+    if(!checking_filelist(fileList))
     {
 
        for(const auto &v : fileList)
        {
-            if(!QFile::exists(v))
+            if(checking_path_exist(v))
             {
-                QMessageBox::information(this, QGuiApplication::applicationDisplayName(), "Error open file: "
-                                                                                              + fileList.back());
+               pixmapVector.emplace_back(QPixmap(v));
+               ui->imageLabel->setPixmap(pixmapVector[0]);
             }
             else
             {
-                pixmapVector.emplace_back(QPixmap(v));
-                ui->imageLabel->setPixmap(pixmapVector[0]);
+                QMessageBox::information(this, QGuiApplication::applicationDisplayName(), "Error open file: "
+                                                                                              + fileList.back());
             }
        }
     }
